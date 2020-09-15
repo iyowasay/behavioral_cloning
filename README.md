@@ -46,7 +46,7 @@ The architechture of this project is based on the [Nvidia end-to-end self drivin
 2. normalize all the pixel values.
 3. crop the upper and lower part of original images, since these pixels don't contain important information for training.
 
-<img src="/examples/table.png" alt="table" width="600" height="330"/>
+<img src="/examples/table.png" alt="table" width="600" height="660"/>
 
 Parameters:
 - Dropout rate = 0.3
