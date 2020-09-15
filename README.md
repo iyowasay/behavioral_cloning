@@ -70,64 +70,42 @@ Statistics:
 3. Adapt the Nvidia model and add additional layers.
 4. Convert color channel of input images into RGB -> model improved!(due to the fact that the images captured from the simulator are BGR(.jpg), whereas `drive.py` load images in RGB to predict the steering angles)
 5. Decide to use smaller batch size(higher accuracy but more noisy and time-consuming).
-6. Hyperparameters tunning -> without falling off the track but shaky.
-7. Add randomness to the steer correction factor -> model improved!
-8. Try different combination of data(since )
+6. Tune hyperparameters -> without falling off the track but shaky.
+7. Add randomness to the correction factor of steering angle -> model improved!
+8. Try different combination of datasets(since the quality may vary between each sets).
 9. Save the BEST model!
 
 ### Result and reflection
 
 Here is [the bird's-eye view video](https://youtu.be/gHSvIalDYVw) of the result. 
 
-Current trained model `model.h5` is able to drive around the track several times without falling off. The training results are shown below. 
+Current trained model `model.h5` is able to drive around the track several times without falling off, with the set speed of 25. The training results are shown below. 
 
 Epoch 1/5
-
 516/516 [==============================] - 65s 126ms/step - loss: 0.0320 - val_loss: 0.0373
-
 Epoch 2/5
-
 516/516 [==============================] - 62s 121ms/step - loss: 0.0295 - val_loss: 0.0343
-
 Epoch 3/5
-
 516/516 [==============================] - 62s 121ms/step - loss: 0.0283 - val_loss: 0.0329
-
 Epoch 4/5
-
 516/516 [==============================] - 62s 121ms/step - loss: 0.0273 - val_loss: 0.0312
-
 Epoch 5/5
-
 516/516 [==============================] - 62s 121ms/step - loss: 0.0263 - val_loss: 0.0305
 
 Here the model had a low mean squared error on the training set but a high mean squared error on the validation set. This implied that the model was overfitting. Note that the mean squared errors(losses) between each training attempts are not comparable, meaning that smaller loss does not correspond to better performance.  
 
-The quality of collected data also plays an important role in end-to-end deep learning.
+The quality and amount of collected data play important roles in end-to-end deep learning. For instance, the model might not know how to react while facing rare situation or edge cases that are not included in the training data. 
+Moreover, the performance also depends on the targeting speed from drive.py. It is easier to achieve a complete drive-around with lower set speed. 
 
-The most challenging part is the turn close to the water. fall into water
-How do I improve the model, the process
+### Ways to improvement
 
+1. Give the control back to the driver(manual driving) and start data recording as soon as it is about to drive off the track. These data will help the model learn how strong the vehicle should steer at the edge of the road.
 
+2. Get more data from the vehicle system, not just the images. Better time series data or other information from the simulator( in reality, signals of other kinds of sensor readings) may help while training the model.
 
-the targeting speed from drive.py
+3. Instead of predicting the steering angle, predict where the vehicle should be placed in each frame and then to move or steer according to this prediction. It might be closer to the behavior of human drivers. 
 
-Quality of data
-
-
-
-
-### Ways to improve model
-
-1. Start recording as soon as the car is taken over manually when it is about to drive off the track. These data will help the model learn how strong the vehicle should steer at the edge of the road.
-
-2. Get more data from the , not just images. Better images or time series data
-
-3. Instead of predicting the steering angle, it might be more to predict where the vehicle should be place in each frame and then to move 
-
-4. Use other imformation from the simulator(in reality, other sensor readings from the car)
- 
-5.
+4. Add image augmentation using OpenCV for generalization and increasing robustness.
 
 <!-- Layer (type)                 Output Shape              Param #   
 =================================================================
