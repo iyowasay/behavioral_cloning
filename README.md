@@ -4,11 +4,11 @@ The goals / steps of this project are the following:
 * Use the simulator to collect data of "good" driving behavior
 * Build a convolution neural network in Keras that predicts steering angles from images
 * Train and validate the model with a training and validation set
-* Test that the model successfully drives around track one without leaving the road
+* Test that the model successfully drives around the track
 * Summarize the results with a written report
 
 ---
-In this project, you will use what you've learned about deep neural networks and convolutional neural networks to clone driving behavior. You will train, validate and test a model using Keras. The model will output a steering angle to an autonomous vehicle.
+In this project, you will use what you've learned about deep neural networks and convolutional neural networks to clone driving behavior. Here the file `drive.py` will load the trained model and use the model to make predictions on individual images in real-time and send the predicted angle back to the server via a websocket connection. At the end, the vehicle should be able to drive autonomously around the track without leaving the road.
 
 ### Preparation
 
@@ -42,11 +42,11 @@ Generator is a great way to cope with large amount of data. Instead of processin
 The architechture of this project is based on the [Nvidia end-to-end self driving car](https://developer.nvidia.com/blog/deep-learning-self-driving-cars/), which is a demonstration of transfer learning. RELU activation functions are used to introduce nonlinearity. In addition, the model used an Adam optimizer, so manually tuning the learning rate is not necessary. Also, the model contains dropout layers in order to reduce overfitting. The detailed structure of the model is shown in the following figure.
 
 #### Preprocessing steps
-1. convert BGR(.jpg) to RGB image.
-2. normalize all the pixel values.
-3. crop the upper and lower part of original images, since these pixels don't contain important information for training.
+1. Convert BGR(.jpg) to RGB image.
+2. Normalize all the pixel values.
+3. Crop the upper and lower part of original images, since these pixels don't contain important information for training.
 
-<img src="/examples/table.png" alt="table" width="600" height="660"/>
+<img src="/examples/table.png" alt="table" width="600" height="600"/>
 
 Parameters:
 - Dropout rate = 0.3
@@ -63,64 +63,57 @@ Statistics:
 - Number of validation samples: 3670
 
 
-### Tunning approach
+#### Tunning approach
 
-The overall strategy for deriving a model architecture was to start with the LeNet network to validate the connection to the Udacity simulator, then adapt the Nvidia model and tune the hyperparameters in order to achieve a successful driving. On the first few trials, the vehicle fell off the track frequently. It is because the discr of the color channel between input images and the images generated from `drive.py`. After converting the color channel, 4
+1. Drive manually in the simulator and collect data.
+2. Validate the training process and the connection to the simulator by useing LeNet network.
+3. Adapt the Nvidia model and add additional layers.
+4. Convert color channel of input images into RGB -> model improved!(due to the fact that the images captured from the simulator are BGR(.jpg), whereas `drive.py` load images in RGB to predict the steering angles)
+5. Decide to use smaller batch size(higher accuracy but more noisy and time-consuming).
+6. Hyperparameters tunning -> without falling off the track but shaky.
+7. Add randomness to the steer correction factor -> model improved!
+8. Try different combination of data(since )
+9. Save the BEST model!
 
-Note that the mean squared errors between each training 
-By  
+### Result and reflection
 
-I found that my first model had a low mean squared error on the training set but a high mean squared error on the validation set. This implied that the model was overfitting. 
+Here is [the bird's-eye view video](https://youtu.be/gHSvIalDYVw) of the result. 
 
-The final step was to run the simulator to see how well the car was driving around track one. There were a few spots where the vehicle fell off the track... to improve the driving behavior in these cases, I ....
+Current trained model `model.h5` is able to drive around the track several times without falling off. The training results are shown below. 
 
-#### Code implementation
+Epoch 1/5
 
-- simulator 
+516/516 [==============================] - 65s 126ms/step - loss: 0.0320 - val_loss: 0.0373
 
-Dependencies
-We have provided a simulator where you can steer a car around a track for data collection. You'll use image data and steering angles to train a neural network and then use this model to drive the car autonomously around the track.
+Epoch 2/5
 
-```sh
-python drive.py model.h5
-```
+516/516 [==============================] - 62s 121ms/step - loss: 0.0295 - val_loss: 0.0343
 
-The above command will load the trained model and use the model to make predictions on individual images in real-time and send the predicted angle back to the server via a websocket connection.
+Epoch 3/5
 
-Note: There is known local system's setting issue with replacing "," with "." when using drive.py. When this happens it can make predicted steering values clipped to max/min values. If this occurs, a known fix for this is to add "export LANG=en_US.utf8" to the bashrc file.
+516/516 [==============================] - 62s 121ms/step - loss: 0.0283 - val_loss: 0.0329
 
-### Result
+Epoch 4/5
 
-https://youtu.be/gHSvIalDYVw
+516/516 [==============================] - 62s 121ms/step - loss: 0.0273 - val_loss: 0.0312
 
-The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
+Epoch 5/5
 
-- Please keep in mind that training images are loaded in BGR colorspace using cv2 while drive.py load images in RGB to predict the steering angles.
+516/516 [==============================] - 62s 121ms/step - loss: 0.0263 - val_loss: 0.0305
+
+Here the model had a low mean squared error on the training set but a high mean squared error on the validation set. This implied that the model was overfitting. Note that the mean squared errors(losses) between each training attempts are not comparable, meaning that smaller loss does not correspond to better performance.  
+
+The quality of collected data also plays an important role in end-to-end deep learning.
 
 The most challenging part is the turn close to the water. fall into water
 How do I improve the model, the process
 
-At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road.
 
+
+the targeting speed from drive.py
 
 Quality of data
 
-_________________________________________________________________
-
-
-Epoch 1/5
-516/516 [==============================] - 65s 126ms/step - loss: 0.0320 - val_loss: 0.0373
-Epoch 2/5
-516/516 [==============================] - 62s 121ms/step - loss: 0.0295 - val_loss: 0.0343
-Epoch 3/5
-516/516 [==============================] - 62s 121ms/step - loss: 0.0283 - val_loss: 0.0329
-Epoch 4/5
-516/516 [==============================] - 62s 121ms/step - loss: 0.0273 - val_loss: 0.0312
-Epoch 5/5
-516/516 [==============================] - 62s 121ms/step - loss: 0.0263 - val_loss: 0.0305
-Model saved.
-
-the losses are not comparable between different models.
 
 
 
@@ -132,7 +125,7 @@ the losses are not comparable between different models.
 
 3. Instead of predicting the steering angle, it might be more to predict where the vehicle should be place in each frame and then to move 
 
-4.
+4. Use other imformation from the simulator(in reality, other sensor readings from the car)
  
 5.
 
