@@ -10,6 +10,8 @@ The goals / steps of this project are the following:
 ---
 In this project, you will use what you've learned about deep neural networks and convolutional neural networks to clone driving behavior. Here the file `drive.py` will load the trained model and use the model to make predictions on individual images in real-time and send the predicted angle back to the server via a websocket connection. At the end, the vehicle should be able to drive autonomously around the track without leaving the road.
 
+Here is [the bird's-eye view video](https://youtu.be/gHSvIalDYVw) of the final result.
+
 ### Preparation
 
 The first and the most important step for end-to-end deep learning is to collect sufficient and useful data. Though one lap of data is enough for the model to successfully drive around the track, the performance of the car can still be improved. Therefore, more data have to be acquired. This can be done by manually driving the car in the opposite direction or applying data augmentation. 
@@ -76,8 +78,6 @@ Statistics:
 9. Save the BEST model!
 
 ### Result and reflection
-
-Here is [the bird's-eye view video](https://youtu.be/gHSvIalDYVw) of the result. 
 
 Current trained model `model.h5` is able to drive around the track several times without falling off, with the set speed of 25. The training results are shown below. 
 
